@@ -20,16 +20,20 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="master-detail-nav">
-        <RouterLink class="master-detail-link" :to="previous">Prethodni</RouterLink>
-        <RouterLink class="master-detail-link" :to="next">Sljedeći</RouterLink>
+    <div class="master-detail-container">
+        <div class="master-detail-nav">
+            <RouterLink class="master-detail-link" :to="previous">Prethodni</RouterLink>
+            <RouterLink class="master-detail-link" :to="next">Sljedeći</RouterLink>
+        </div>
+        <MasterComponent></MasterComponent>
+        <hr>
+        <DetailsComponent></DetailsComponent>
     </div>
-    <MasterComponent></MasterComponent>
-    <hr>
-    <DetailsComponent></DetailsComponent>
 </template>
 
 <style scoped>
+
+
 .master-detail-nav {
     margin: 10px;
     display: flex;
