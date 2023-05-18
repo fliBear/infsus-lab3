@@ -24,7 +24,7 @@ public interface UserAccountService {
 	/*
 	 * Deletes user if exists in database.
 	 */
-	public boolean deleteUser(Long id);
+	public void deleteUser(Long id);
 	/*
 	 * Edits user.
 	 * Validates data.

@@ -36,19 +36,30 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	@Override
 	public boolean createUser(UserAccount user) {
-		// TODO Auto-generated method stub
-		return false;
+		userRepo.save(user);
+		return true;
 	}
 
 	@Override
-	public boolean deleteUser(Long id) {
-		// TODO Auto-generated method stub
-		return false;
+	public void deleteUser(Long id) {
+		userRepo.deleteById(id);
 	}
 
 	@Override
 	public boolean editUser(Long id, UserAccount user) {
-		// TODO Auto-generated method stub
+		Optional<UserAccount> optional = userRepo.findById(id);
+		if(optional.isPresent()){
+			UserAccount existingAccount= optional.get();
+			existingAccount.setUserName(user.getUserName());
+			existingAccount.setAge(user.getAge());
+			existingAccount.setCity(user.getCity());
+			existingAccount.setEmail(user.getEmail());
+			existingAccount.setPhoneNumber(user.getPhoneNumber());
+			existingAccount.setRole(user.getRole());
+
+			userRepo.save(existingAccount);
+			return true;
+		}
 		return false;
 	}
 
