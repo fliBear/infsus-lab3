@@ -1,5 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import User from "./models/User";
+import axios from 'axios';
 
 //Refs for changing a specific advertisement
 let selectedAd = ref();
@@ -7,6 +9,8 @@ let boardGame = ref();
 let price = ref();
 let condition = ref();
 let city = ref();
+
+// let ads = ref();
 
 //Refs for adding new advertisement
 let creatingNew = ref(false);
@@ -61,7 +65,9 @@ function cancelCreate() {
 
 function createNew() {
     if(creatingNew.value) {
-        //axios dio
+        axios.post(calls.advertisement, {
+            
+        })
     } else {
         selectedAd.value = null;
         boardGame.value = null;
@@ -71,6 +77,14 @@ function createNew() {
     }
     creatingNew.value = !creatingNew.value
 }
+
+async function loadData() {
+    ads.value = User.loadAdvertisements();
+}
+
+onMounted(async() => {
+    await loadData();
+})
 
 </script>
 

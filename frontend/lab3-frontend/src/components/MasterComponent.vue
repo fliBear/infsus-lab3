@@ -1,29 +1,58 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import User from "./models/User";
+import { useRoute } from 'vue-router'
 
-let publishers = ["Prvi", "Drugi", "Treći"];
+let route = useRoute();
+
+let publishers = ref([]);
+let languages = ref([]);
+let genres = ref();
 
 let name = ref();
-let maxPlayers = ref();
-let minPlayers = ref();
+let noPlayersMax = ref();
+let noPlayersMin = ref();
 let age = ref();
-let avgPlayTime = ref();
-let publisher = ref(publishers[0]);
-let langauge = ref(publishers[0]);
-let genre = ref(publishers[0]);
+let avgPlayingTime = ref();
+let publisher = ref();
+let language = ref();
+let genre = ref();
 
 function preventReload(){}
 
-function save() {
-    console.log(maxPlayers.value);
-    console.log(name.value);
-    console.log(minPlayers.value);
-    console.log(age.value);
-    console.log(avgPlayTime.value);
-    console.log(publisher.value);
-    console.log(langauge.value);
-    console.log(genre.value);
+// function save() {
+//     axios.post(calls.boardGame, {
+//         "name": name.value,
+//         "noPlayersMax": noPlayersMax.value,
+//         "noPlayersMin": noPlayersMin.value,
+//         "age": age.value,
+//         "avgPlayingTime": avgPlayingTime.value,
+//         "publisher": {"id": 1, "name": "nekoime"},
+//         "language": {},
+//         "genre": {}
+//     })
+// }
+
+async function load() {
+    let boardGame = await User.loadBoardGame(route.params.id);
+    name.value = boardGame.name;
+    noPlayersMax.value = boardGame.noPlayersMax;
+    noPlayersMin.value = boardGame.noPlayersMin;
+    age.value = boardGame.age;
+    avgPlayingTime.value = boardGame.avgPlayingTime;
+
+    languages.value = await User.loadLanguages();
+    publishers.value = await User.loadPublishers();
+    genres.value = await User.loadGenres();
+
+    language.value = boardGame.language.name;
+    publisher.value = boardGame.publisher.name;
+    genre.value = boardGame.genre.name;
 }
+
+onMounted(async () => {
+    await load();
+})
 
 </script>
 
@@ -37,12 +66,12 @@ function save() {
 
             <div class="input-container">
                 <label for="max-players" class="master-label">Maksimalni broj igrača:</label>
-                <input id="max-players" type="number" class="master-input" v-model="maxPlayers">
+                <input id="max-players" type="number" class="master-input" v-model="noPlayersMax">
             </div>
 
             <div class="input-container">
                 <label for="min-players" class="master-label"> Minimalni broj igrača:</label>
-                <input id="min-players" type="number" class="master-input" v-model="minPlayers">
+                <input id="min-players" type="number" class="master-input" v-model="noPlayersMin">
             </div>
 
            <div class="input-container">
@@ -52,27 +81,27 @@ function save() {
 
             <div class="input-container">
                 <label for="avg-play-time" class="master-label">Prosječno trajanje igre:</label>
-                <input id="avg-play-time" type="number" class="master-input" v-model="avgPlayTime">
+                <input id="avg-play-time" type="number" class="master-input" v-model="avgPlayingTime">
             </div>
 
             <div class="input-container">
                 <label for="publishers" class="master-label">Izdavač:</label>
                 <select id="publishers" class="master-input master-select" v-model="publisher">
-                    <option v-for="p in publishers" :key="p" :value="p">{{ p }}</option>
+                    <option v-for="p in publishers" :key="p.id" :value="p.name">{{ p.name }}</option>
                 </select>
             </div>
 
             <div class="input-container">
                 <label for="langauges" class="master-label">Jezik:</label>
-                <select id="languages" class="master-input master-select" v-model="langauge">
-                    <option v-for="p in publishers" :key="p" :value="p">{{ p }}</option>
+                <select id="languages" class="master-input master-select" v-model="language">
+                    <option v-for="l in languages" :key="l.id" :value="l.name">{{ l.name }}</option>
                 </select>
             </div>
 
             <div class="input-container">
                 <label for="genres" class="master-label">Žanr:</label>
                 <select id="genres" class="master-input master-select" v-model="genre">
-                    <option v-for="p in publishers" :key="p" :value="p">{{ p }}</option>
+                    <option v-for="g in genres" :key="g.id" :value="g.name">{{ g.name }}</option>
                 </select>
             </div>
         </div>

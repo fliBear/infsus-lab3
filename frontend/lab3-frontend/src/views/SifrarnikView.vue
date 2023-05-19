@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
 let sifarniciList = [
     {"id":1,"username":"prvi","email":"prviemail","phoneNumber":"123","age":2},
@@ -145,7 +145,6 @@ function createNew() {
                             <button type="button" class="edit-button button" @click="editAd(s.id)">
                                     {{ editText() }}
                             </button>
-                            <button type="button" class="delete-button button" @click="deleteAd()">Obriši</button>
                             <button type="button" class="edit-button button" @click="cancelEdit()" v-if="showEdit(s.id)">
                                 Odustani
                             </button>
