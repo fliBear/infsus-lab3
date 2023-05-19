@@ -28,14 +28,14 @@ public class Advertisement {
 	}
 
 	public Advertisement(Long id, int price, String condition, Date expiryDate, Date advertisementDate,
-			UserAccount user, BoardGame boadGame, City city) {
+			UserAccount user, BoardGame boardGame, City city) {
 		this.id = id;
 		this.price = price;
 		this.condition = condition;
 		this.expiryDate = expiryDate;
 		this.advertisementDate = advertisementDate;
 		this.user = user;
-		this.boadGame = boadGame;
+		this.boardGame = boardGame;
 		this.city = city;
 	}
 
@@ -88,11 +88,11 @@ public class Advertisement {
 	}
 
 	public BoardGame getBoadGame() {
-		return boadGame;
+		return boardGame;
 	}
 
 	public void setBoadGame(BoardGame boadGame) {
-		this.boadGame = boadGame;
+		this.boardGame = boadGame;
 	}
 
 	public City getCity() {
