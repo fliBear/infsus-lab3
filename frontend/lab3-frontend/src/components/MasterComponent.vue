@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import User from "./models/User";
+import User from "../models/User";
 import { useRoute } from 'vue-router'
 
 let route = useRoute();

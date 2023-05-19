@@ -1,20 +1,20 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-
-let sifarniciList = [
-    {"id":1,"username":"prvi","email":"prviemail","phoneNumber":"123","age":2},
-    { "id": 2, "username": "drugi", "email": "drugiemail", "phoneNumber": "567", "age": 7 }
-]
+import User from "../models/User";
 
 let search = ref("");
 
 //Refs for changing a specific advertisement
 let selectedSif = ref();
-let sifrarnici = ref(sifarniciList);
+let sifrarnici = ref();
 let username = ref();
 let email = ref();
 let phoneNumber = ref();
 let age = ref();
+let role = ref();
+let roles = ref();
+let city = ref();
+let cities = ref();
 
 //Refs for adding a new advertisemenet
 let creatingNew = ref(false);
@@ -25,11 +25,15 @@ function filterSifrarnik(s) {
 }
 
 const searchResult = computed(() => {
+    if(!sifrarnici.value) return true;
     return sifrarnici.value.filter(filterSifrarnik);
 }); 
 
 function editAd(id) {
     if (selectedSif.value === Number(id)) {
+        let userRole = roles.value.find((el) => role.value === el.description);
+        let userCity = cities.value.find((el) => city.value === el.name);
+        User.editUser(selectedSif.value, username.value, email.value, phoneNumber.value, age.value, userRole, userCity)
         selectedSif.value = -1;
     } else {
         selectedSif.value = Number(id);
@@ -38,6 +42,8 @@ function editAd(id) {
         email.value = null;
         phoneNumber.value = null;
         age.value = null;
+        role.value = sifrarnici.value.find((el) => Number(el.id) === selectedSif.value).role.description;
+        city.value = sifrarnici.value.find((el) => Number(el.id) === selectedSif.value).city.name;
     }
 }
 
@@ -79,9 +85,23 @@ function createNew() {
         email.value=null;
         phoneNumber.value = null;
         age.value = null;
+        role.value = roles.value[0].description;
+        city.value = cities.value[0].name;
     }
     creatingNew.value = !creatingNew.value
 }
+
+async function loadData() {
+    sifrarnici.value = await User.loadUsers();
+    roles.value = await User.loadRoles();
+    role.value = roles.value[0].description;
+    cities.value = await User.loadCities();
+    city.value = cities.value[0].name;
+}
+
+onMounted(async () => {
+    await loadData();
+})
 
 </script>
 
@@ -110,6 +130,18 @@ function createNew() {
                 <label for="age" class="sifrarnik-label">Dob:</label>
                 <input id="age" type="number" class="sifrarnik-input" v-model="age">
             </div>
+            <div class="input-container">
+                <label for="role" class="sifrarnik-label">Uloga:</label>
+                <select id="role" class="sifrarnik-input sifrarnik-select" v-model="role">
+                    <option v-for="r in roles" :key="r.id" :value="r.description">{{ r.description }}</option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label for="city" class="sifrarnik-label">Grad:</label>
+                <select id="city" class="sifrarnik-input sifrarnik-select" v-model="city">
+                    <option v-for="c in cities" :key="c.id" :value="c.name">{{ c.name }}</option>
+                </select>
+            </div>
         </form>
         <div>
             <button class="button create-button" @click="createNew">Stvori novi</button>
@@ -123,6 +155,8 @@ function createNew() {
                         <span class="sifrarnik-element-description sifrarnik-element-data">Email </span>
                         <span class="sifrarnik-element-description sifrarnik-element-data">Broj telefona </span>
                         <span class="sifrarnik-element-description sifrarnik-element-data">Dob </span>
+                        <span class="sifrarnik-element-description sifrarnik-element-data">Uloga </span>
+                        <span class="sifrarnik-element-description sifrarnik-element-data">Grad </span>
                     </div>
                 </li>
                 <li v-for="s in searchResult" :key="s.id" class="sifrarnik-element">
@@ -140,10 +174,16 @@ function createNew() {
                             <span class="sifrarnik-element-data">
                                 {{ s.age }}
                             </span>
+                            <span class="sifrarnik-element-data">
+                                {{ s.role.description }}
+                            </span>
+                            <span class="sifrarnik-element-data">
+                                {{ s.city.name }}
+                            </span>
                         </div>
                         <div class="details-element-actions">
                             <button type="button" class="edit-button button" @click="editAd(s.id)">
-                                    {{ editText() }}
+                                    {{ editText(s.id) }}
                             </button>
                             <button type="button" class="edit-button button" @click="cancelEdit()" v-if="showEdit(s.id)">
                                 Odustani
@@ -169,6 +209,18 @@ function createNew() {
                         <div class="input-container">
                             <label for="age" class="sifrarnik-label">Dob:</label>
                             <input id="age" type="number" class="sifrarnik-input" v-model="age">
+                        </div>
+                        <div class="input-container">
+                            <label for="role" class="sifrarnik-label">Uloga:</label>
+                            <select id="role" class="sifrarnik-input sifrarnik-select" v-model="role">
+                                <option v-for="r in roles" :key="r.id" :value="r.description">{{ r.description }}</option>
+                            </select>
+                        </div>
+                        <div class="input-container">
+                            <label for="city" class="sifrarnik-label">Grad:</label>
+                            <select id="city" class="sifrarnik-input sifrarnik-select" v-model="city">
+                                <option v-for="c in cities" :key="c.id" :value="c.name">{{ c.name }}</option>
+                            </select>
                         </div>
                     </form>
                 </li>
@@ -258,7 +310,7 @@ function createNew() {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 13em;
+    height: 17em;
 }
 
 .sifrarnik-input {
@@ -285,6 +337,10 @@ function createNew() {
     font-weight: bold;
     background-color: rgb(132, 132, 245);
     width: fit-content;
+}
+
+.sifrarnik-select {
+    height: 2em;
 }
 
 </style>

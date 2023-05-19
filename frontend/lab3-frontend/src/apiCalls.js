@@ -19,6 +19,8 @@ let calls = {
     deleteAdvertisement: base + "deleteAdvertisement/",
     editAdvertisement: base + "editAdvertisement/",
     allPublishers: base + "publishers",
+    allRoles: base + "roles",
+    allCities: base + "cities",
 };
 
 export default calls;

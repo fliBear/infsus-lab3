@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import User from "./models/User";
+import User from "../models/User";
 import axios from 'axios';
 
 //Refs for changing a specific advertisement
@@ -10,15 +10,10 @@ let price = ref();
 let condition = ref();
 let city = ref();
 
-// let ads = ref();
+let ads = ref();
 
 //Refs for adding new advertisement
 let creatingNew = ref(false);
-
-let ads = [
-    {"advertisement_id":1, "price":2, "condition":"Dobro", "city":{"city_id":7, "name":"Zagreb"}, "boardGame":{"name":"Catan"}},
-    { "advertisement_id": 2, "price": 21, "condition": "Dobro", "city": { "city_id": 8, "name": "Osijek" }, "boardGame": { "name": "Catan" } }
-]
 
 function editAd(id) {
     if(selectedAd.value === Number(id)) {
@@ -79,7 +74,7 @@ function createNew() {
 }
 
 async function loadData() {
-    ads.value = User.loadAdvertisements();
+    ads.value = await User.loadAdvertisements();
 }
 
 onMounted(async() => {
@@ -127,7 +122,7 @@ onMounted(async() => {
                     <span class="details-element-description details-element-data">Grad </span>
                 </div>
             </li>
-            <li v-for="ad in ads" :key="ad.advertisement_id" class="details-element">
+            <li v-for="ad in ads" :key="ad.id" class="details-element">
                 <div class="details-element-container">
                     <div>
                         <span class="details-element-data">
@@ -144,14 +139,14 @@ onMounted(async() => {
                         </span>
                     </div>
                     <div class="details-element-actions">
-                        <button type="button" class="edit-button button" @click="editAd(ad.advertisement_id)">
-                            {{editText(ad.advertisement_id)}}
+                        <button type="button" class="edit-button button" @click="editAd(ad.id)">
+                            {{editText(ad.id)}}
                         </button>
-                        <button type="button" class="delete-button button" @click="deleteAd(ad.advertisement_id)">Obriši</button>
-                        <button type="button" class="edit-button button" @click="cancelEdit" v-if="showEdit(ad.advertisement_id)">Odustani</button>
+                        <button type="button" class="delete-button button" @click="deleteAd(ad.id)">Obriši</button>
+                        <button type="button" class="edit-button button" @click="cancelEdit" v-if="showEdit(ad.id)">Odustani</button>
                     </div>
                 </div>
-                <form class="details-element-edit" @submit.prevent="preventReload" v-if="showEdit(ad.advertisement_id)">
+                <form class="details-element-edit" @submit.prevent="preventReload" v-if="showEdit(ad.id)">
                     <div class="input-container">
                         <label for="boardGame" class="details-label">Društvena igra:</label>
                         <select id="boardGame" class="details-input details-select" v-model="boardGame">
