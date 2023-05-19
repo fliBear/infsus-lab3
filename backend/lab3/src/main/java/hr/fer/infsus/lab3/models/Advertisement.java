@@ -87,11 +87,11 @@ public class Advertisement {
 		this.user = user;
 	}
 
-	public BoardGame getBoadGame() {
+	public BoardGame getBoardGame() {
 		return boardGame;
 	}
 
-	public void setBoadGame(BoardGame boadGame) {
+	public void setBoardGame(BoardGame boadGame) {
 		this.boardGame = boadGame;
 	}
 

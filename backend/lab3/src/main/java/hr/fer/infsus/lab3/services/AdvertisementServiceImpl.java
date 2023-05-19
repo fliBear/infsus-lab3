@@ -44,7 +44,7 @@ public class AdvertisementServiceImpl implements AdvertisementService{
         Optional<Advertisement> opt = advertisementRepository.findById(id);
         if(opt.isPresent()){
             Advertisement existingAdvertisement=opt.get();
-            existingAdvertisement.setBoadGame(advertisement.getBoadGame());
+            existingAdvertisement.setBoardGame(advertisement.getBoardGame());
             existingAdvertisement.setCity(advertisement.getCity());
             existingAdvertisement.setCondition(advertisement.getCondition());
             existingAdvertisement.setPrice(advertisement.getPrice());

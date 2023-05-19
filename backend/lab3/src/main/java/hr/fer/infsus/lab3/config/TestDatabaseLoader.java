@@ -107,7 +107,7 @@ public class TestDatabaseLoader {
 		
 		Advertisement ad = new Advertisement();
 		ad.setAdvertisementDate(new Date());
-		ad.setBoadGame(bg);
+		ad.setBoardGame(bg);
 		ad.setCity(city);
 		ad.setCondition("Dobro");
 		ad.setExpiryDate(new Date());
