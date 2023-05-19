@@ -2,6 +2,8 @@ package hr.fer.infsus.lab3.controllers;
 
 import hr.fer.infsus.lab3.models.Advertisement;
 import hr.fer.infsus.lab3.services.AdvertisementService;
+import hr.fer.infsus.lab3.services.AdvertisementServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +15,7 @@ import java.util.List;
 public class AdvertisementController {
     private AdvertisementService advertisementService;
     @Autowired
-    public AdvertisementController(AdvertisementService advertisementService){
+    public AdvertisementController(AdvertisementServiceImpl advertisementService){
         this.advertisementService = advertisementService;
     }
 

@@ -4,6 +4,8 @@ import hr.fer.infsus.lab3.models.Language;
 import hr.fer.infsus.lab3.models.Publisher;
 import hr.fer.infsus.lab3.services.LanguageService;
 import hr.fer.infsus.lab3.services.PublisherService;
+import hr.fer.infsus.lab3.services.PublisherServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ public class PublisherController {
     private PublisherService publisherService;
 
     @Autowired
-    public PublisherController(PublisherService publisherService){
+    public PublisherController(PublisherServiceImpl publisherService){
         this.publisherService = publisherService;
     }
 

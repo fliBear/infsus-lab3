@@ -4,6 +4,8 @@ import hr.fer.infsus.lab3.models.City;
 import hr.fer.infsus.lab3.models.Genre;
 import hr.fer.infsus.lab3.services.CityService;
 import hr.fer.infsus.lab3.services.GenreService;
+import hr.fer.infsus.lab3.services.GenreServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ public class GenreController {
     private GenreService genreService;
 
     @Autowired
-    public GenreController(GenreService genreService){
+    public GenreController(GenreServiceImpl genreService){
         this.genreService = genreService;
     }
 

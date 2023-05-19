@@ -5,6 +5,8 @@ import hr.fer.infsus.lab3.models.Genre;
 import hr.fer.infsus.lab3.models.Language;
 import hr.fer.infsus.lab3.services.GenreService;
 import hr.fer.infsus.lab3.services.LanguageService;
+import hr.fer.infsus.lab3.services.LanguageServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +19,7 @@ public class LanguageController {
     private LanguageService languageService;
 
     @Autowired
-    public LanguageController(LanguageService languageService){
+    public LanguageController(LanguageServiceImpl languageService){
         this.languageService = languageService;
     }
 

@@ -2,6 +2,8 @@ package hr.fer.infsus.lab3.controllers;
 
 import hr.fer.infsus.lab3.models.City;
 import hr.fer.infsus.lab3.services.CityService;
+import hr.fer.infsus.lab3.services.CityServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +16,7 @@ public class CityController {
     private CityService cityService;
 
     @Autowired
-    public CityController(CityService cityService){
+    public CityController(CityServiceImpl cityService){
         this.cityService = cityService;
     }
 

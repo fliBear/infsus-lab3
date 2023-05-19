@@ -4,6 +4,8 @@ import hr.fer.infsus.lab3.models.Publisher;
 import hr.fer.infsus.lab3.models.Role;
 import hr.fer.infsus.lab3.services.PublisherService;
 import hr.fer.infsus.lab3.services.RoleService;
+import hr.fer.infsus.lab3.services.RoleServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ public class RoleController {
     private RoleService roleService;
 
     @Autowired
-    public RoleController(RoleService roleService){
+    public RoleController(RoleServiceImpl roleService){
         this.roleService = roleService;
     }
 

@@ -4,6 +4,8 @@ import hr.fer.infsus.lab3.models.City;
 import hr.fer.infsus.lab3.models.County;
 import hr.fer.infsus.lab3.services.CityService;
 import hr.fer.infsus.lab3.services.CountyService;
+import hr.fer.infsus.lab3.services.CountyServiceImpl;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,7 @@ public class CountyController {
     private CountyService countyService;
 
     @Autowired
-    public CountyController(CountyService countyService){
+    public CountyController(CountyServiceImpl countyService){
         this.countyService = countyService;
     }
 

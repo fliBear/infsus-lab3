@@ -3,10 +3,12 @@ package hr.fer.infsus.lab3.services;
 import hr.fer.infsus.lab3.models.County;
 import hr.fer.infsus.lab3.repositories.CountyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CountyServiceImpl implements CountyService{
     private CountyRepository countyRepository;
 
