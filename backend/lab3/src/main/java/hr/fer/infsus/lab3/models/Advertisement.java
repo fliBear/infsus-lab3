@@ -20,7 +20,7 @@ public class Advertisement {
 	@ManyToOne
 	private UserAccount user;
 	@ManyToOne
-	private BoardGame boadGame;
+	private BoardGame boardGame;
 	@ManyToOne
 	private City city;
 	
