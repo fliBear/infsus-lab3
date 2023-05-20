@@ -1,5 +1,6 @@
 package hr.fer.infsus.lab3.controllers;
 
+import hr.fer.infsus.lab3.dto.AdvertisementDTO;
 import hr.fer.infsus.lab3.models.Advertisement;
 import hr.fer.infsus.lab3.services.AdvertisementService;
 import hr.fer.infsus.lab3.services.AdvertisementServiceImpl;
@@ -35,12 +36,12 @@ public class AdvertisementController {
     }
 
     @PostMapping("/createAdvertisement")
-    public ResponseEntity<Advertisement> createAdvertisement(@RequestBody Advertisement advertisement) {
-        boolean isCreated = advertisementService.createAdvertisement(advertisement);
-        if (isCreated==false) {
+    public ResponseEntity<Advertisement> createAdvertisement(@RequestBody AdvertisementDTO advertisementDTO) { // dtoAdvertismeent
+        Advertisement adToPost = advertisementService.createAdvertisement(advertisementDTO);
+        if (adToPost==null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(advertisement);
+        return ResponseEntity.status(HttpStatus.CREATED).body(adToPost);
     }
 
     @DeleteMapping ("/deleteAdvertisement/{id}")
@@ -50,12 +51,12 @@ public class AdvertisementController {
     }
 
     @PutMapping("/editAdvertisement/{id}")
-    public ResponseEntity<Advertisement> editAdvertisement(@PathVariable Long id, @RequestBody Advertisement advertisement) {
-        boolean isEdited = advertisementService.editAdvertisement(id, advertisement);
+    public ResponseEntity<AdvertisementDTO> editAdvertisement(@PathVariable Long id, @RequestBody AdvertisementDTO advertisementDTO) {
+        boolean isEdited = advertisementService.editAdvertisement(id, advertisementDTO);
         if (!isEdited) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(advertisement);
+        return ResponseEntity.ok(advertisementDTO);
     }
 
 }
