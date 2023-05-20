@@ -95,9 +95,9 @@ function createNew() {
 }
 
 async function loadData() {
-    ads.value = await User.loadAdvertisements();
+    let loadedData = await User.loadAdvertisements();
     setTimeout(() => {
-        ads.value = ads.value.filter((el) => Number(el.boardGame.id) === Number(bgStore.bgId));
+        ads.value = loadedData.filter((el) => Number(el.boardGame.id) === Number(bgStore.bgId));
     }, 500)
     cities.value = await User.loadCities();
     city.value = cities.value[0].name;
