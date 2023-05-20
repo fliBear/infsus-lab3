@@ -35,6 +35,9 @@ function editAd(id) {
         let userCity = cities.value.find((el) => city.value === el.name);
         User.editUser(selectedSif.value, username.value, email.value, phoneNumber.value, age.value, userRole, userCity)
         selectedSif.value = -1;
+        setTimeout(async () => {
+            loadData();
+        }, 100);
     } else {
         selectedSif.value = Number(id);
         creatingNew.value = null;
@@ -47,7 +50,11 @@ function editAd(id) {
     }
 }
 
-function deleteAd(id) {
+async function deleteUser(id) {
+    User.deleteUser(id);
+    setTimeout(async () => {
+        loadData();
+    }, 100);
 }
 
 function preventReload() { }
@@ -78,7 +85,12 @@ function cancelCreate() {
 
 function createNew() {
     if (creatingNew.value) {
-        //axios
+        let userRole = roles.value.find((el) => role.value === el.description);
+        let userCity = cities.value.find((el) => city.value === el.name);
+        User.createUser(username.value, email.value, phoneNumber.value, age.value, userRole, userCity);
+        setTimeout(async () => {
+            loadData();
+        }, 100);
     } else {
         selectedSif.value = null;
         username.value = null;
@@ -184,6 +196,9 @@ onMounted(async () => {
                         <div class="details-element-actions">
                             <button type="button" class="edit-button button" @click="editAd(s.id)">
                                     {{ editText(s.id) }}
+                            </button>
+                            <button type="button" class="delete-button button" @click="deleteUser(s.id)">
+                                Obriši
                             </button>
                             <button type="button" class="edit-button button" @click="cancelEdit()" v-if="showEdit(s.id)">
                                 Odustani

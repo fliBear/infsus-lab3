@@ -5,6 +5,7 @@ export default class Advertisement {
     constructor(data) {
         this.id = data.id;
         this.condition = data.condition;
+        this.price = data.price;
         this.city = new City(data.city);
         this.boardGame = new BoardGame(data.boardGame);
     }
