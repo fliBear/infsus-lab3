@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import hr.fer.infsus.lab3.models.Advertisement;
 import hr.fer.infsus.lab3.models.BoardGame;
 import hr.fer.infsus.lab3.models.City;
-import hr.fer.infsus.lab3.models.County;
 import hr.fer.infsus.lab3.models.Genre;
 import hr.fer.infsus.lab3.models.Language;
 import hr.fer.infsus.lab3.models.Publisher;
@@ -18,7 +17,6 @@ import hr.fer.infsus.lab3.models.UserAccount;
 import hr.fer.infsus.lab3.repositories.AdvertisementRepository;
 import hr.fer.infsus.lab3.repositories.BoardGameRepository;
 import hr.fer.infsus.lab3.repositories.CityRepository;
-import hr.fer.infsus.lab3.repositories.CountyRepository;
 import hr.fer.infsus.lab3.repositories.GenreRepository;
 import hr.fer.infsus.lab3.repositories.LanguageRepository;
 import hr.fer.infsus.lab3.repositories.PublisherRepository;
@@ -33,7 +31,7 @@ public class TestDatabaseLoader {
 	private AdvertisementRepository advertisementRepo;
 	private BoardGameRepository bgRepo;
 	private CityRepository cityRepo;
-	private CountyRepository countyRepo;
+
 	private GenreRepository genreRepo;
 	private LanguageRepository langRepo;
 	private PublisherRepository publisherRepo;
@@ -42,13 +40,12 @@ public class TestDatabaseLoader {
 	
 	@Autowired
 	public TestDatabaseLoader(AdvertisementRepository advertisementRepo, BoardGameRepository bgRepo,
-			CityRepository cityRepo, CountyRepository countyRepo, GenreRepository genreRepo,
+			CityRepository cityRepo, GenreRepository genreRepo,
 			LanguageRepository langRepo,PublisherRepository publisherRepo, RoleRepository roleRepo,
 			UserAccountRepository userRepo) {
 		this.advertisementRepo = advertisementRepo;
 		this.bgRepo = bgRepo;
 		this.cityRepo = cityRepo;
-		this.countyRepo = countyRepo;
 		this.genreRepo = genreRepo;
 		this.langRepo = langRepo;
 		this.publisherRepo = publisherRepo;
@@ -76,13 +73,8 @@ public class TestDatabaseLoader {
 		genre.setName("Kartaška igra");
 		genreRepo.save(genre);
 		
-		County county = new County();
-		county.setName("Brodsko-posavska županija");
-		countyRepo.save(county);
-		
 		City city = new City();
 		city.setName("Slavonski Brod");
-		city.setCounty(county);
 		cityRepo.save(city);
 		
 		BoardGame bg = new BoardGame();

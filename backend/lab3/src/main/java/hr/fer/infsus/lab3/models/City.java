@@ -12,16 +12,15 @@ public class City {
 	@GeneratedValue
 	private Long id;
 	private String name;
-	@ManyToOne
-	private County county;
+
 	
 	public City() {
 	}
 
-	public City(Long id, String name, County county) {
+	public City(Long id, String name) {
 		this.id = id;
 		this.name = name;
-		this.county = county;
+
 	}
 
 	public Long getId() {
@@ -40,12 +39,5 @@ public class City {
 		this.name = name;
 	}
 
-	public County getCounty() {
-		return county;
-	}
-
-	public void setCounty(County county) {
-		this.county = county;
-	}
 	
 }

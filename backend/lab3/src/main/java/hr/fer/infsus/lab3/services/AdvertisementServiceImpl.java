@@ -12,6 +12,9 @@ import hr.fer.infsus.lab3.repositories.UserAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +58,7 @@ public class AdvertisementServiceImpl implements AdvertisementService{
         Optional<UserAccount> userAccountOptional = userAccountRepository.findById(userAccountId);
         UserAccount userAccount = userAccountOptional.orElseThrow(() -> new RuntimeException("No user with this id: " + userAccountId));
         Advertisement newAdvertisement = new Advertisement();
-        newAdvertisement.setAdvertisementDate(advertisementDTO.getAdvertisementDate());
+        newAdvertisement.setAdvertisementDate(new Date());
         newAdvertisement.setPrice(advertisementDTO.getPrice());
         newAdvertisement.setCondition(advertisementDTO.getCondition());
         newAdvertisement.setExpiryDate(advertisementDTO.getExpiryDate());
