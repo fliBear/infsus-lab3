@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "name": "Uno Board",
+        "noPlayersMin": 2,
+        "noPlayersMax": 10,
+        "age": 10,
+        "avgPlayingTime": 3,
+        "publisher": { "id": 1, "name": "Disney" },
+        "language": { "id": 1, "name": "Hrvatski" },
+        "genre": {
+            "id": 1,
+            "name": "Kartaška igra",
+            "description": "Igra se s kratama"
+        }
+    }
+]
