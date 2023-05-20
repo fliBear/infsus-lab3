@@ -21,10 +21,31 @@ export default class User {
 
     static createBoardGame() {}
 
-    static editBoardGame() {}
+    static editBoardGame(
+        id_v,
+        name_v,
+        noPlayersMax_v,
+        noPlayersMin_v,
+        age_v,
+        avgPlayingTime_v,
+        publisher_v,
+        language_v,
+        genre_v
+    ) {
+        let obj = {
+            name: name_v,
+            noPlayersMax: noPlayersMax_v,
+            noPlayersMin: noPlayersMin_v,
+            age: age_v,
+            avgPlayingTime: avgPlayingTime_v,
+            publisher: publisher_v,
+            language: language_v,
+            genre: genre_v,
+        };
+        axios.put(calls.editBoardGame + id_v, obj);
+    }
 
     static createAd(
-        id_v,
         price_v,
         condition_v,
         expiryDate_v,
@@ -34,7 +55,6 @@ export default class User {
         city_id
     ) {
         let obj = {
-            id: id_v,
             price: price_v,
             condition: condition_v,
             expiryDate: expiryDate_v,
@@ -81,7 +101,6 @@ export default class User {
         city_v
     ) {
         let obj = {
-            id: id_v,
             userName: username_v,
             email: email_v,
             phoneNumber: phoneNumber_v,
@@ -109,12 +128,11 @@ export default class User {
             role: { id: role_v.id, description: role_v.description },
             city: { id: city_v.id, name: city_v.name },
         };
-        axios.put(calls.editUser + id_v, obj, {
-            headers: {
-                Authorization: "Bearer your-token",
-                "Content-Type": "application/json",
-            },
-        });
+        axios.put(calls.editUser + id_v, obj);
+    }
+
+    static async deleteUser(id) {
+        axios.delete(calls.deleteUser + id);
     }
 
     static async loadBoardGame(id) {

@@ -5,10 +5,11 @@ import { useRoute } from 'vue-router'
 
 let route = useRoute();
 
-let publishers = ref([]);
-let languages = ref([]);
+let publishers = ref();
+let languages = ref();
 let genres = ref();
 
+let id = ref();
 let name = ref();
 let noPlayersMax = ref();
 let noPlayersMin = ref();
@@ -20,21 +21,26 @@ let genre = ref();
 
 function preventReload(){}
 
-// function save() {
-//     axios.post(calls.boardGame, {
-//         "name": name.value,
-//         "noPlayersMax": noPlayersMax.value,
-//         "noPlayersMin": noPlayersMin.value,
-//         "age": age.value,
-//         "avgPlayingTime": avgPlayingTime.value,
-//         "publisher": {"id": 1, "name": "nekoime"},
-//         "language": {},
-//         "genre": {}
-//     })
-// }
+async function save() {
+    let bgPublisher = publishers.value.find((el) => el.name === publisher.value);
+    let bgLanguage = languages.value.find((el) => el.name === language.value);
+    let bgGenre = genres.value.find((el) => el.name === genre.value);
+    User.editBoardGame(id.value, name.value,
+        noPlayersMax.value,
+        noPlayersMin.value,
+        age.value,
+        avgPlayingTime.value,
+        bgPublisher,
+        bgLanguage,
+        bgGenre)
+    setTimeout(async () => {
+        await loadData();
+    }, 100);
+}
 
-async function load() {
+async function loadData() {
     let boardGame = await User.loadBoardGame(route.params.id);
+    id.value = boardGame.id;
     name.value = boardGame.name;
     noPlayersMax.value = boardGame.noPlayersMax;
     noPlayersMin.value = boardGame.noPlayersMin;
@@ -51,7 +57,7 @@ async function load() {
 }
 
 onMounted(async () => {
-    await load();
+    await loadData();
 })
 
 </script>

@@ -6,7 +6,7 @@ import axios from 'axios';
 //Refs for changing a specific advertisement
 let selectedAd = ref();
 let boardGame = ref();
-let price = ref();
+let price = ref(); 
 let condition = ref();
 let city = ref();
 
@@ -29,7 +29,10 @@ function editAd(id) {
 }
 
 function deleteAd(id) {
-
+    User.removeAd(id);
+    setTimeout(async () => {
+        await loadData();
+    },100);
 }
 
 function preventReload() {}
@@ -60,9 +63,9 @@ function cancelCreate() {
 
 function createNew() {
     if(creatingNew.value) {
-        axios.post(calls.advertisement, {
+        // axios.post(calls.advertisement, {
             
-        })
+        // })
     } else {
         selectedAd.value = null;
         boardGame.value = null;

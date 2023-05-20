@@ -2,6 +2,9 @@ package hr.fer.infsus.lab3.models;
 
 import java.util.Date;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -18,6 +21,7 @@ public class Advertisement {
 	private Date expiryDate;
 	private Date advertisementDate;
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private UserAccount user;
 	@ManyToOne
 	private BoardGame boardGame;
