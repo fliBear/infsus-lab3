@@ -1,7 +1,9 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue';
 import User from "../models/User";
-import axios from 'axios';
+import { useBoardGameStore } from "../stores/boardGameStore";
+
+let bgStore = useBoardGameStore();
 
 //Refs for changing a specific advertisement
 let selectedAd = ref();
@@ -9,22 +11,33 @@ let boardGame = ref();
 let price = ref(); 
 let condition = ref();
 let city = ref();
+let expiryDate = ref();
 
 let ads = ref();
+let cities = ref();
 
 //Refs for adding new advertisement
 let creatingNew = ref(false);
 
 function editAd(id) {
     if(selectedAd.value === Number(id)) {
+        let adData = ads.value.find((el) => el.id === selectedAd.value);
+        let bgId = adData.boardGame.id;
+        let userId = adData.user.id;
+        let cityId = cities.value.find((el) => el.name = city.value).id;
+        User.editAd(selectedAd.value, price.value, condition.value, new Date(expiryDate.value).toISOString(), null, userId, bgId, cityId);
         selectedAd.value = -1;
+        setTimeout(async () => {
+            await loadData();
+        }, 500);
     } else {
         selectedAd.value = Number(id);
+        let adData = ads.value.find((el) => el.id === selectedAd.value);
         creatingNew.value = false;
-        boardGame.value = null;
-        price.value = null;
-        condition.value = null;
-        city.value = null;
+        price.value = adData.price;
+        condition.value = adData.condition;
+        city.value = adData.city.name;
+        expiryDate.value = adData.expiryDate.split("T")[0];
     }
 }
 
@@ -32,7 +45,7 @@ function deleteAd(id) {
     User.removeAd(id);
     setTimeout(async () => {
         await loadData();
-    },100);
+    }, 500);
 }
 
 function preventReload() {}
@@ -63,37 +76,56 @@ function cancelCreate() {
 
 function createNew() {
     if(creatingNew.value) {
-        // axios.post(calls.advertisement, {
-            
-        // })
+        let adData = ads.value[0];
+        let bgId = adData.boardGame.id;
+        let userId = adData.user.id;
+        let cityId = cities.value.find((el) => el.name = city.value).id;
+        User.createAd(price.value, condition.value, new Date(expiryDate.value).toISOString(), null, userId, bgId, cityId);
+        setTimeout(async () => {
+            await loadData();
+        }, 500);
     } else {
         selectedAd.value = null;
         boardGame.value = null;
         price.value = null;
         condition.value = null;
-        city.value = null;
+        city.value = cities.value[0].name;
     }
     creatingNew.value = !creatingNew.value
 }
 
 async function loadData() {
     ads.value = await User.loadAdvertisements();
+    setTimeout(() => {
+        ads.value = ads.value.filter((el) => Number(el.boardGame.id) === Number(bgStore.bgId));
+    }, 500)
+    cities.value = await User.loadCities();
+    city.value = cities.value[0].name;
 }
 
 onMounted(async() => {
     await loadData();
 })
 
+let checkPrice = computed(() => {
+    return price.value && price.value >= 0;
+})
+
+let checkCondition = computed(() => {
+    return condition.value;
+})
+
+function checkEditing (id) {
+    return id === selectedAd.value;
+}
 </script>
 
 <template>
     <form class="details-element-create" @submit.prevent="preventReload" v-if="creatingNew">
         <h3>Dodavanje novog oglasa</h3>
         <div class="input-container">
-            <label for="boardGame" class="details-label">Društvena igra:</label>
-            <select id="boardGame" class="details-input details-select" v-model="boardGame">
-                <option v-for="bg in boardGames" :key="bg.id" :value="bg">{{ bg.name }}</option>
-            </select>
+            <label for="expiryDate" class="details-label">Istek oglasa:</label>
+            <input type="date" id="expiryDate" class="details-input details-select" v-model="expiryDate">
         </div>
 
         <div class="input-container">
@@ -109,11 +141,11 @@ onMounted(async() => {
         <div class="input-container">
             <label for="city" class="details-label">Grad:</label>
             <select id="city" class="details-input details-select" v-model="city">
-                <option v-for="c in cities" :key="c" :value="c.id">{{ c.name }}</option>
+                <option v-for="c in cities" :key="c.ic" :value="c.name">{{ c.name }}</option>
             </select>
         </div>
     </form>
-    <button class="button create-button" @click="createNew">Stvori novi</button>
+    <button class="button create-button" @click="createNew" :disabled="creatingNew && (!checkCondition || !checkPrice)" >Stvori novi</button>
     <button class="button create-button" @click="cancelCreate" v-if="creatingNew">Odustani</button>
     <div class="details-list-container">
         <ul class="details-list">
@@ -123,6 +155,7 @@ onMounted(async() => {
                     <span class="details-element-description details-element-data">Cijena </span>
                     <span class="details-element-description details-element-data">Stanje </span>
                     <span class="details-element-description details-element-data">Grad </span>
+                    <span class="details-element-description details-element-data">Istek oglasa </span>
                 </div>
             </li>
             <li v-for="ad in ads" :key="ad.id" class="details-element">
@@ -140,9 +173,12 @@ onMounted(async() => {
                         <span class="details-element-data">
                             {{ ad.city.name }}
                         </span>
+                        <span class="details-element-data">
+                            {{ new Date(ad.expiryDate).toLocaleDateString() }}
+                        </span>
                     </div>
                     <div class="details-element-actions">
-                        <button type="button" class="edit-button button" @click="editAd(ad.id)">
+                        <button type="button" class="edit-button button" @click="editAd(ad.id)" :disabled="checkEditing(ad.id) && (!checkCondition || !checkPrice)">
                             {{editText(ad.id)}}
                         </button>
                         <button type="button" class="delete-button button" @click="deleteAd(ad.id)">Obriši</button>
@@ -151,10 +187,8 @@ onMounted(async() => {
                 </div>
                 <form class="details-element-edit" @submit.prevent="preventReload" v-if="showEdit(ad.id)">
                     <div class="input-container">
-                        <label for="boardGame" class="details-label">Društvena igra:</label>
-                        <select id="boardGame" class="details-input details-select" v-model="boardGame">
-                            <option v-for="bg in boardGames" :key="bg.id" :value="bg">{{ bg.name }}</option>
-                        </select>
+                        <label for="expiryDate" class="details-label">Istek oglasa:</label>
+                        <input type="date" id="expiryDate" class="details-input details-select" v-model="expiryDate">
                     </div>
 
                     <div class="input-container">
@@ -170,7 +204,7 @@ onMounted(async() => {
                     <div class="input-container">
                         <label for="city" class="details-label">Grad:</label>
                         <select id="city" class="details-input details-select" v-model="city">
-                            <option v-for="c in cities" :key="c" :value="c.id">{{ c.name }}</option>
+                            <option v-for="c in cities" :key="c.id" :value="c.name">{{ c.name }}</option>
                         </select>
                     </div>
                 </form>

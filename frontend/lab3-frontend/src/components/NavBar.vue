@@ -5,7 +5,7 @@ import { RouterLink } from 'vue-router'
 <template>
     <div class="navbar">
         <router-link class="home-link" to="/">Početna stranica</router-link>
-        <router-link class="home-link" to="/board-games">Društvene igre</router-link>
+        <router-link class="home-link" to="/master-detail/1">Društvene igre</router-link>
         <router-link class="home-link" to="/sifrarnici">Šifrarnici</router-link>
     </div>
 </template>

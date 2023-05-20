@@ -1,9 +1,13 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import User from "../models/User";
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import {useBoardGameStore} from "../stores/boardGameStore";
 
 let route = useRoute();
+let router = useRouter();
+
+let bgStore = useBoardGameStore();
 
 let publishers = ref();
 let languages = ref();
@@ -35,11 +39,17 @@ async function save() {
         bgGenre)
     setTimeout(async () => {
         await loadData();
-    }, 100);
+    }, 500);
+}
+
+function chooseBoardGame(boardGames) {
+    return boardGames[Number(route.params.id) - 1];
 }
 
 async function loadData() {
-    let boardGame = await User.loadBoardGame(route.params.id);
+    let boardGames = await User.loadBoardGames();
+    let boardGame = chooseBoardGame(boardGames);
+    bgStore.setId(boardGame.id);
     id.value = boardGame.id;
     name.value = boardGame.name;
     noPlayersMax.value = boardGame.noPlayersMax;
@@ -57,7 +67,45 @@ async function loadData() {
 }
 
 onMounted(async () => {
+    let boardGames = await User.loadBoardGames();
+    if(boardGames.length === 0) {
+        router.push("/");
+    }
+    if (Number(route.params.id) > boardGames.length) {
+        router.push("/master-detail/" + boardGames.length);
+    }
+    if (Number(route.params.id) < 1) {
+        router.push("/master-detail/1");
+    }
     await loadData();
+})
+
+let checkName = computed(() => {
+    return name.value;
+})
+
+let checkAge = computed(() => {
+    return age.value > 0;
+})
+
+let checkMax = computed(() => {
+    return noPlayersMax.value >= 1 && noPlayersMin.value ? noPlayersMax.value >= noPlayersMin.value : noPlayersMax.value >= 1;
+})
+
+let checkMin = computed(() => {
+    return noPlayersMin.value >= 1 && noPlayersMax.value ? noPlayersMax.value >= noPlayersMin.value : noPlayersMin.value >= 1;
+
+})
+
+let checkAvg = computed(() => {
+    return avgPlayingTime.value > 0; 
+})
+
+watch(route, async (to, from) => {
+    let boardGames = await User.loadBoardGames();
+    if(Number(to.params.id) > boardGames.length) {
+        router.push("/master-detail/" + boardGames.length);
+    }
 })
 
 </script>
@@ -112,7 +160,7 @@ onMounted(async () => {
             </div>
         </div>
         <div class="master-actions">
-            <button class="save-button button" @click="save">Spremi</button>
+            <button class="save-button button" @click="save" :disabled="!checkAge || !checkAvg || !checkMax || !checkMin || !checkName">Spremi</button>
             <button class="delete-button button">Obriši</button>
         </div>
     </form>
