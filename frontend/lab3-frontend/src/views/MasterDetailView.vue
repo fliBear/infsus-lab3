@@ -2,19 +2,19 @@
 import MasterComponent from "../components/MasterComponent.vue";
 import DetailsComponent from "../components/DetailsComponent.vue";
 import { useRoute } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import { RouterLink } from 'vue-router'
 
 let route = useRoute();
-let param = ref(0);
 
-let previousId = Number(route.params.id) === 1 ? 1 : Number(route.params.id) - 1;
-let previous = ref("/master-detail/" + previousId);
-let nextId = Number(route.params.id) + 1;
-let next = ref("/master-detail/" + nextId)
+let previous = computed(() => {
+    let previousId = Number(route.params.id) === 1 ? 1 : Number(route.params.id) - 1;
+    return "/master-detail/" + previousId;
+})
 
-onMounted(() => {
-    param.value = route.params.id
+let next = computed(() => {
+    let nextId = Number(route.params.id) + 1;
+    return "/master-detail/" + nextId;
 })
 
 </script>

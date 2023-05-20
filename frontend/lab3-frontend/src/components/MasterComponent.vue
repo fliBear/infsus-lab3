@@ -106,6 +106,7 @@ watch(route, async (to, from) => {
     if(Number(to.params.id) > boardGames.length) {
         router.push("/master-detail/" + boardGames.length);
     }
+    loadData();
 })
 
 </script>
