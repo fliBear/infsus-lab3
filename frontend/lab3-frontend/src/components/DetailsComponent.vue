@@ -79,7 +79,7 @@ function createNew() {
         let adData = ads.value[0];
         let bgId = adData.boardGame.id;
         let userId = adData.user.id;
-        let cityId = cities.value.find((el) => el.name = city.value).id;
+        let cityId = cities.value.find((el) => el.name === city.value).id;
         User.createAd(price.value, condition.value, new Date(expiryDate.value).toISOString(), null, userId, bgId, cityId);
         setTimeout(async () => {
             await loadData();
