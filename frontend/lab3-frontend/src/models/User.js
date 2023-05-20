@@ -58,10 +58,10 @@ export default class User {
             price: price_v,
             condition: condition_v,
             expiryDate: expiryDate_v,
-            advertisementDate: advertisementDate_v,
-            user: user_id,
-            boardgame: boardgame_id,
-            city: city_id,
+            advertisementDate: expiryDate_v,
+            userId: user_id,
+            boardGameId: boardgame_id,
+            cityId: city_id,
         };
         axios.post(calls.createAdvertisement, obj);
     }
@@ -77,13 +77,14 @@ export default class User {
         city_id
     ) {
         let obj = {
+            id: id_v,
             price: price_v,
             condition: condition_v,
             expiryDate: expiryDate_v,
-            advertisementDate: advertisementDate_v,
-            user: user_id,
-            boardgame: boardgame_id,
-            city: city_id,
+            advertisementDate: expiryDate_v,
+            userId: user_id,
+            boardGameId: boardgame_id,
+            cityId: city_id,
         };
         axios.put(calls.editAdvertisement + id_v, obj);
     }
@@ -142,6 +143,18 @@ export default class User {
             return new BoardGame(data);
         } catch (error) {
             console.log("Failed to load board game");
+        }
+    }
+
+    static async loadBoardGames(id) {
+        try {
+            let response = await axios.get(calls.allBoardGames);
+            let data = response.data;
+            return data.map((el) => {
+                return new BoardGame(el);
+            });
+        } catch (error) {
+            console.log("Failed to load board games");
         }
     }
 

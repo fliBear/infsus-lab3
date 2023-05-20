@@ -37,14 +37,15 @@ function editAd(id) {
         selectedSif.value = -1;
         setTimeout(async () => {
             loadData();
-        }, 100);
+        }, 500);
     } else {
         selectedSif.value = Number(id);
+        let sifData = sifrarnici.value.find((el) => el.id === selectedSif.value);
         creatingNew.value = null;
-        username.value = null;
-        email.value = null;
-        phoneNumber.value = null;
-        age.value = null;
+        username.value = sifData.username;
+        email.value = sifData.email;
+        phoneNumber.value = sifData.phoneNumber;
+        age.value = sifData.age;
         role.value = sifrarnici.value.find((el) => Number(el.id) === selectedSif.value).role.description;
         city.value = sifrarnici.value.find((el) => Number(el.id) === selectedSif.value).city.name;
     }
@@ -54,7 +55,7 @@ async function deleteUser(id) {
     User.deleteUser(id);
     setTimeout(async () => {
         loadData();
-    }, 100);
+    }, 500);
 }
 
 function preventReload() { }
@@ -90,7 +91,7 @@ function createNew() {
         User.createUser(username.value, email.value, phoneNumber.value, age.value, userRole, userCity);
         setTimeout(async () => {
             loadData();
-        }, 100);
+        }, 500);
     } else {
         selectedSif.value = null;
         username.value = null;
@@ -114,6 +115,26 @@ async function loadData() {
 onMounted(async () => {
     await loadData();
 })
+
+let checkUsername = computed(() => {
+    return username.value;
+})
+
+let checkEmail = computed(() => {
+    return email.value.includes("@");
+})
+
+let checkPhoneNumber = computed(() => {
+    return phoneNumber.value.length >= 3;
+})
+
+let checkAge = computed(() => {
+    return age.value >= 1;
+})
+
+function checkEditing(id) {
+    return id === selectedSif.value;
+}
 
 </script>
 
@@ -156,7 +177,7 @@ onMounted(async () => {
             </div>
         </form>
         <div>
-            <button class="button create-button" @click="createNew">Stvori novi</button>
+            <button class="button create-button" @click="createNew" :disabled="creatingNew && (!checkAge || !checkEmail || !checkPhoneNumber || !checkUsername)">Stvori novi</button>
             <button class="button create-button" @click="cancelCreate" v-if="creatingNew">Odustani</button>
         </div>
         <div class="sifrarnici-list-container">
@@ -194,7 +215,7 @@ onMounted(async () => {
                             </span>
                         </div>
                         <div class="details-element-actions">
-                            <button type="button" class="edit-button button" @click="editAd(s.id)">
+                            <button type="button" class="edit-button button" @click="editAd(s.id)"  :disabled="checkEditing(s.id) && (!checkAge || !checkEmail || !checkPhoneNumber || !checkUsername)">
                                     {{ editText(s.id) }}
                             </button>
                             <button type="button" class="delete-button button" @click="deleteUser(s.id)">
