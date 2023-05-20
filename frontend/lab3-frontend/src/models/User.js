@@ -21,6 +21,10 @@ export default class User {
 
     static createBoardGame() {}
 
+    static async deleteBoardGame(id) {
+        await axios.delete(calls.deleteBoardGame + id);
+    }
+
     static editBoardGame(
         id_v,
         name_v,

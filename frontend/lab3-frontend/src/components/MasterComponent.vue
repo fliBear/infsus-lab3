@@ -42,6 +42,11 @@ async function save() {
     }, 500);
 }
 
+async function deleteBoardGame() {
+    await User.deleteBoardGame(id.value);
+    router.push("/master-detail/" + (Number(route.params.id) + 1));
+}
+
 function chooseBoardGame(boardGames) {
     return boardGames[Number(route.params.id) - 1];
 }
@@ -162,7 +167,7 @@ watch(route, async (to, from) => {
         </div>
         <div class="master-actions">
             <button class="save-button button" @click="save" :disabled="!checkAge || !checkAvg || !checkMax || !checkMin || !checkName">Spremi</button>
-            <button class="delete-button button">Obriši</button>
+            <button class="delete-button button" @click="deleteBoardGame">Obriši</button>
         </div>
     </form>
 
