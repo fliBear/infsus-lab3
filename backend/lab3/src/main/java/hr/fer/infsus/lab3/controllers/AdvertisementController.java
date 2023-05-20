@@ -36,7 +36,7 @@ public class AdvertisementController {
     }
 
     @PostMapping("/createAdvertisement")
-    public ResponseEntity<Advertisement> createAdvertisement(@RequestBody AdvertisementDTO advertisementDTO) { // dtoAdvertismeent
+    public ResponseEntity<Advertisement> createAdvertisement(@RequestBody AdvertisementDTO advertisementDTO) {
         Advertisement adToPost = advertisementService.createAdvertisement(advertisementDTO);
         if (adToPost==null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
