@@ -53,7 +53,7 @@ public class BoardGameServiceImpl implements BoardGameService{
         Optional<BoardGame> optional = boardGameRepository.findById(id);
         if(optional.isPresent()){
             BoardGame existingBoardGame = optional.get();
-
+            existingBoardGame = boardGameRepository.getReferenceById(existingBoardGame.getId());
             existingBoardGame.setAge(boardGame.getAge());
             existingBoardGame.setName(boardGame.getName());
             existingBoardGame.setGenre(boardGame.getGenre());

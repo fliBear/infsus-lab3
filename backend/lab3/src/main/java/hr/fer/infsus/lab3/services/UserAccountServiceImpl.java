@@ -56,6 +56,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		Optional<UserAccount> optional = userRepo.findById(id);
 		if(optional.isPresent()){
 			UserAccount existingAccount= optional.get();
+			existingAccount = userRepo.getReferenceById(existingAccount.getId());
 			existingAccount.setUserName(user.getUserName());
 			existingAccount.setAge(user.getAge());
 			existingAccount.setCity(user.getCity());

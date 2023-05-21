@@ -82,7 +82,7 @@ public class AdvertisementServiceImpl implements AdvertisementService{
             // Advertisement not found with the given ID
             return false;
         }
-
+        existingAdvertisement =advertisementRepository.getReferenceById(existingAdvertisement.getId());
         // Update the existing advertisement with the values from the DTO
         existingAdvertisement.setAdvertisementDate(advertisementDTO.getAdvertisementDate());
         existingAdvertisement.setPrice(advertisementDTO.getPrice());

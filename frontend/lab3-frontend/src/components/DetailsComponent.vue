@@ -27,7 +27,7 @@ function editAd(id) {
         let adData = ads.value.find((el) => el.id === selectedAd.value);
         let bgId = adData.boardGame.id;
         let userId = adData.user.id;
-        let cityId = cities.value.find((el) => el.name = city.value).id;
+        let cityId = cities.value.find((el) => el.name === city.value).id;
         User.editAd(selectedAd.value, price.value, condition.value, new Date(expiryDate.value).toISOString(), null, userId, bgId, cityId);
         selectedAd.value = -1;
         setTimeout(async () => {

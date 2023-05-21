@@ -20,6 +20,7 @@ public class Advertisement {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private UserAccount user;
 	@ManyToOne
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private BoardGame boardGame;
 	@ManyToOne
 	private City city;
