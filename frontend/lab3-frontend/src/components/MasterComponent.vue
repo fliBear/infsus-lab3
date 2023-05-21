@@ -108,11 +108,12 @@ let checkAvg = computed(() => {
 
 watch(route, async (to, from) => {
     let boardGames = await User.loadBoardGames();
-    let boardGame = chooseBoardGame(boardGames);
-    bgStore.setId(boardGame.id);
     if(Number(to.params.id) > boardGames.length) {
         router.push("/master-detail/" + boardGames.length);
+        return;
     }
+    let boardGame = chooseBoardGame(boardGames);
+    bgStore.setId(boardGame.id);
     loadData();
 })
 
