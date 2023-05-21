@@ -1,9 +1,12 @@
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import User from "../models/User";
 import { useBoardGameStore } from "../stores/boardGameStore";
+import { useRoute } from 'vue-router'
 
 let bgStore = useBoardGameStore();
+
+let route = useRoute();
 
 //Refs for changing a specific advertisement
 let selectedAd = ref();
@@ -74,11 +77,18 @@ function cancelCreate() {
     city.value = null;
 }
 
-function createNew() {
+async function createNew() {
     if(creatingNew.value) {
         let adData = ads.value[0];
-        let bgId = adData.boardGame.id;
-        let userId = adData.user.id;
+        let bgId = bgStore.id;
+        if (bgId === undefined) {
+            let boardGames = await User.loadBoardGames();
+            let boardGame = chooseBoardGame(boardGames);
+            bgId = boardGame.id;
+        }
+        let users = await User.loadUsers();
+        if(users.length === 0) return;
+        let userId = users[0].id;
         let cityId = cities.value.find((el) => el.name === city.value).id;
         User.createAd(price.value, condition.value, new Date(expiryDate.value).toISOString(), null, userId, bgId, cityId);
         setTimeout(async () => {
@@ -94,12 +104,19 @@ function createNew() {
     creatingNew.value = !creatingNew.value
 }
 
+function chooseBoardGame(boardGames) {
+    return boardGames[Number(route.params.id) - 1];
+}
+
 async function loadData() {
     let loadedData = await User.loadAdvertisements();
-    // setTimeout(() => {
-        
-    // }, 500)
-    ads.value = loadedData.filter((el) => Number(el.boardGame.id) === Number(bgStore.bgId));
+    let bgId = bgStore.id;
+    if(bgId === undefined) {
+        let boardGames = await User.loadBoardGames();
+        let boardGame = chooseBoardGame(boardGames);
+        bgId = boardGame.id;
+    }
+    ads.value = loadedData.filter((el) => Number(el.boardGame.id) === Number(bgId));
     cities.value = await User.loadCities();
     city.value = cities.value[0].name;
 }
@@ -119,6 +136,10 @@ let checkCondition = computed(() => {
 function checkEditing (id) {
     return id === selectedAd.value;
 }
+
+watch(route, async (to, from) => {
+    loadData();
+})
 </script>
 
 <template>
