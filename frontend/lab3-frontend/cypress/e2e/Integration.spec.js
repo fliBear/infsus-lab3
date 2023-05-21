@@ -7,7 +7,7 @@ describe("MasterComponent integration test", () => {
             "advertisementsRequest"
         );
 
-        cy.visit("http://127.0.0.1:4173/master-detail/1");
+        cy.visit("http://localhost:4173/master-detail/1");
 
         cy.wait("@boardGamesRequest").should("have.property", "response");
         cy.wait("@advertisementsRequest").should("have.property", "response");

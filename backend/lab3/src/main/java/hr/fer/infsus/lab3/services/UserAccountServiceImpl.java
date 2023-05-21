@@ -36,6 +36,12 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	@Override
 	public boolean createUser(UserAccount user) {
+		String name = user.getUserName();
+		name = name.replace("<", "[");
+		name = name.replace(">", "]");
+		name = name.replace("\'","\'\'");
+		name = name.replace("\"", "\'\'");
+		user.setUserName(name);
 		userRepo.save(user);
 		return true;
 	}

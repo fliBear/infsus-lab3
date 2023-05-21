@@ -32,6 +32,13 @@ public class BoardGameServiceImpl implements BoardGameService{
 
     @Override
     public boolean createBoardGame(BoardGame boardGame) {
+        String name = boardGame.getName();
+
+        // Sanitize input by replacing "<" and ">" with another value
+        name = name.replace("<", "[");
+        name = name.replace(">", "]");
+        name = name.replace("\'","\'\'");
+        name = name.replace("\"", "\'\'");
         boardGameRepository.save(boardGame);
         return true;
     }
